@@ -20,9 +20,46 @@
   </head>
   <body>
     
-    <canvas id="game canvas" height="600px" width="800px">        </canvas>
+    <canvas id="game-canvas" height="600px" width="800px">        </canvas>
     
     <script type="text/javascript">
+      
+      var canvas = document.getElementById("game-canvas");
+      // Get a 2D context for the canvas.
+      var ctx = canvas.getContext("2d");
+      // Make the fill style black.
+      ctx.fillStyle = "black";
+      
+      var pong = 
+          {
+            x:400,
+            y:500,
+            h:30,
+            w:80,
+          }
+      function drawPong()
+      {
+        ctx.beginPath();
+        ctx.fillRect(pong.x,pong.y,pong.w,pong.h);
+        ctx.fill();
+      
+      }
+      
+      drawPong();
+      
+       // Add an event listener to the keypress event.
+      window.addEventListener("keydown", function(event) 
+      { 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (event.keyCode == 39 && pong.x < canvas.width - pong.w)
+          pong.x += 5;
+        else (event.keyCode == 37  && pong.y > pong.w)
+          pong.x -= 5;
+      
+      
+      drawPong();
+      });
      
     </script>
   </body>
