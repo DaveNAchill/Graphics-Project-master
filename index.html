@@ -7,12 +7,12 @@
     <style type="text/css">
       body 
       {
-          background-color: white;
+          background-color: black;
       }
       
       canvas 
       {
-        border: 1px solid black;
+        border: 1px solid green;
       }
     
     </style>
@@ -20,46 +20,112 @@
   </head>
   <body>
     
-    <canvas id="game-canvas" height="600px" width="800px">        </canvas>
+    
+    <canvas id="game-canvas" height="600px" width="800px"</canvas>
     
     <script type="text/javascript">
       
       var canvas = document.getElementById("game-canvas");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
-      // Make the fill style black.
-      ctx.fillStyle = "black";
       
-      var pong = 
-          {
-            x:400,
-            y:500,
-            h:30,
-            w:80,
-          }
-      function drawPong()
+      
+      var ballR = 5;
+      var x = canvas.width / 2;
+      var y = canvas.height - 30;
+      var dx = 2;
+      var dy = -2;
+      var pongX = (canvas.width - pongW) / 2;
+      var pongH = 10;
+      var pongW = 75;
+      var rightKeyPressed = false;
+      var leftKeyPressed = false;
+      
+       
+       
+      // function to draw the ball 
+      function drawBall() 
       {
-        ctx.beginPath();
-        ctx.fillRect(pong.x,pong.y,pong.w,pong.h);
-        ctx.fill();
-      
+      ctx.beginPath();
+      ctx.arc(x, y, ballR, 0, Math.PI*2);
+      ctx.fillStyle = "blue";
+      ctx.fill();
+      ctx.closePath();
       }
       
+      // function draw the pong
+      function drawPong() 
+      {
+      ctx.beginPath();
+      ctx.rect(pongX, canvas.height - pongH, pongW, pongH);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.closePath();
+      }
+
+      function draw() 
+      {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBall();
       drawPong();
-      
-       // Add an event listener to the keypress event.
-      window.addEventListener("keydown", function(event) 
-      { 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+       
+      if(x + dx > canvas.width-ballR || x + dx < ballR)       
+      {
+          dx = -dx;
+      }
+      if(y + dy > canvas.height-ballR || y + dy < ballR)       
+      {
+          dy = -dy;
+      }
+
+      if(rightKeyPressed && pongX < canvas.width-pongW) 
+      {
+          paddleX += 5;
+      }
+      else if(leftKeyPressed && pongX > 0) 
+      {
+          pongX -= 5;
+      }
+
+      x += dx;
+      y += dy;
         
-        if (event.keyCode == 39 && pong.x < canvas.width - pong.w)
-          pong.x += 5;
-        else (event.keyCode == 37  && pong.y > pong.w)
-          pong.x -= 5;
+      }
       
       
-      drawPong();
-      });
+      // Add an event listener to the keypress event.
+       document.addEventListener("keydown", keyDown,false);
+       document.addEventListener("keyup", keyUp, false);
+
+       function keyDown(e) 
+        {
+          if(e.keyCode == 39) 
+          {
+              rightKeyPressed = true;
+          }
+          else if(e.keyCode == 37) 
+          {
+              leftKeyPressed = true;
+          }
+         }
+        
+      function keyUp(e)
+      {
+          if(e.keyCode == 39) 
+          {
+              rightKeyPressed = false;
+          }
+          else if(e.keyCode == 37) 
+          {
+              leftKeyPressed = false;
+          }
+      }
+
+     setInterval(draw, 10);
+     drawBall();
+     drawPong();
+              
      
     </script>
   </body>
