@@ -30,103 +30,117 @@
       var ctx = canvas.getContext("2d");
       
       
-      var ballR = 5;
-      var x = canvas.width / 2;
-      var y = canvas.height - 30;
-      var dx = 2;
-      var dy = -2;
-      var pongX = (canvas.width - pongW) / 2;
-      var pongH = 10;
-      var pongW = 75;
-      var rightKeyPressed = false;
-      var leftKeyPressed = false;
+      var ballR = 10; 
+      var x = canvas.width/2;
+      var y = canvas.height-30;
+      var dx = 3;
+      var dy = -3;
+      var pongH = 15;
+      var pongW = 80;
+      var pongX = (canvas.width-pongW) / 2;
+      var rightKey = false;
+      var leftKey = false;
+
       
-       
-       
       // function to draw the ball 
       function drawBall() 
       {
-      ctx.beginPath();
-      ctx.arc(x, y, ballR, 0, Math.PI*2);
-      ctx.fillStyle = "blue";
-      ctx.fill();
-      ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(x, y, ballR, 0, Math.PI*2);
+          ctx.fillStyle = "red";
+          ctx.fill();
+          ctx.closePath();
       }
       
       // function draw the pong
       function drawPong() 
       {
-      ctx.beginPath();
-      ctx.rect(pongX, canvas.height - pongH, pongW, pongH);
-      ctx.fillStyle = "red";
-      ctx.fill();
-      ctx.closePath();
+          ctx.beginPath();
+          ctx.rect(pongX, canvas.height-pongH, pongW, pongH);
+          ctx.fillStyle = "blue";
+          ctx.fill();
+          ctx.closePath();
       }
-
+      
+      
       function draw() 
       {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBall();
-      drawPong();
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawBall();
+          drawPong();
 
-       
-      if(x + dx > canvas.width-ballR || x + dx < ballR)       
-      {
-          dx = -dx;
-      }
-      if(y + dy > canvas.height-ballR || y + dy < ballR)       
-      {
-          dy = -dy;
-      }
-
-      if(rightKeyPressed && pongX < canvas.width-pongW) 
-      {
-          paddleX += 5;
-      }
-      else if(leftKeyPressed && pongX > 0) 
-      {
-          pongX -= 5;
-      }
-
-      x += dx;
-      y += dy;
-        
-      }
-      
-      
-      // Add an event listener to the keypress event.
-       document.addEventListener("keydown", keyDown,false);
-       document.addEventListener("keyup", keyUp, false);
-
-       function keyDown(e) 
-        {
-          if(e.keyCode == 39) 
+          if(x + dx > canvas.width-ballR || x + dx < ballR) 
           {
-              rightKeyPressed = true;
+              dx = -dx;
           }
-          else if(e.keyCode == 37) 
-          {
-              leftKeyPressed = true;
-          }
-         }
         
-      function keyUp(e)
+          if(y + dy < ballR) 
+          {
+              dy = -dy;
+          }
+        
+          else if(y + dy > canvas.height-ballR) 
+          {
+              if(x > pongX && x < pongX + pongW) 
+              {
+                  dy = -dy;
+              }
+              else 
+              {
+                // if the ball hits the bottom of canvas
+                // reload the game
+                  document.location.reload();
+              }
+          }
+      // when key is pressed 
+      function keyDown(e) 
       {
           if(e.keyCode == 39) 
           {
-              rightKeyPressed = false;
+              rightKey = true;
           }
+        
           else if(e.keyCode == 37) 
           {
-              leftKeyPressed = false;
+              leftKey = true;
+          }
+      }
+      
+      // when key is not pressed
+      function keyUp(e) 
+      {
+          if(e.keyCode == 39) 
+          {
+              rightKey = false;
+          }
+        
+          else if(e.keyCode == 37) 
+          {
+              leftKey = false;
           }
       }
 
-     setInterval(draw, 10);
-     drawBall();
-     drawPong();
-              
-     
+        // Add an event listener to the keypress event.
+        document.addEventListener("keydown", keyDown,  false);
+        document.addEventListener("keyup", keyUp, false);
+         
+          // move the pong right if the right key pressed
+          if(rightKey && pongX < canvas.width-pongW) 
+          {
+              pongX += 7;
+          }
+          // move the pong left if the left key pressed
+          else if(leftKey && pongX > 0) 
+          {
+              pongX -= 7;
+          }
+
+          x += dx;
+          y += dy;
+      }
+
+      setInterval(draw, 10);
+      
     </script>
   </body>
 </html>
