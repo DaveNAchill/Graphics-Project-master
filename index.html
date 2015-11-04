@@ -21,7 +21,7 @@
   <body>
     
     
-    <canvas id="game-canvas" height="600px" width="800px"</canvas>
+    <canvas id="game-canvas" height="600px" width="650px"</canvas>
     
     <script type="text/javascript">
       
@@ -35,13 +35,39 @@
       var y = canvas.height-30;
       var dx = 3;
       var dy = -3;
-      var pongH = 15;
+      var pongH =5;
       var pongW = 80;
       var pongX = (canvas.width-pongW) / 2;
       var rightKey = false;
       var leftKey = false;
-
+      var brickRows = 3;
+      var brickCol = 7;
+      var brickW = 75;
+      var brickH = 20;
+      var holdBall = true;
+      var brickOffsetTop = 30;
+      var brickOffsetLeft = 30;
+      var score = 0;
       
+
+      var bricks = [];
+      for(c=0; c<brickCol; c++) 
+      {
+        bricks[c] = [];
+        for(r=0; r<brickRows; r++) 
+        {
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
+        }
+      }
+      
+      function drawScore() 
+      {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "red";
+        ctx.fillText("Score: "+score, 8, 20);
+      }
+      
+  
       // function to draw the ball 
       function drawBall() 
       {
@@ -62,12 +88,68 @@
           ctx.closePath();
       }
       
+      // function draw the bricks
+      function drawBricks() 
+      {
+        for(c=0; c<brickCol; c++) 
+        {
+          for(r=0; r<brickRows; r++) 
+          {
+            if(bricks[c][r].status == 1) 
+            {
+                var brickX = (c*(brickW + 5) + brickOffsetLeft);
+                var brickY = (r*(brickH + 5) + brickOffsetTop);
+                bricks[c][r].x = brickX;
+                bricks[c][r].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickW, brickH);
+                ctx.fillStyle = "green";
+                ctx.fill();
+                ctx.closePath();
+            }
+          }
+        }
+      }
+      
+      // function to detect collisions
+      function collisions() 
+      {
+        for(c=0; c<brickCol; c++) 
+        {
+            for(r=0; r<brickRows; r++) 
+            {
+                var b = bricks[c][r];
+                if(b.status == 1) 
+                {
+                  
+                    if(x > b.x && x < b.x+brickW && y > b.y && y < b.y+brickH) 
+                    {
+                        dy = -dy;
+                        b.status = 0;
+                        score++;
+                        // if all the bricks are gone 
+                        if(score == brickRows * brickCol) 
+                        {
+                            alert("Winner!");
+                            document.location.reload();
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      
+      
       
       function draw() 
       {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawBricks();
           drawBall();
           drawPong();
+          drawScore();
+          collisions();
+          
 
           if(x + dx > canvas.width-ballR || x + dx < ballR) 
           {
@@ -89,6 +171,7 @@
               {
                 // if the ball hits the bottom of canvas
                 // reload the game
+                  alert("Game Over");
                   document.location.reload();
               }
           }
