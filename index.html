@@ -21,7 +21,7 @@
   <body>
     
     
-    <canvas id="game-canvas" height="600px" width="635px"</canvas>
+    <canvas id="game-canvas" height="600px" width="640px"</canvas>
     
     <script type="text/javascript">
       
@@ -29,39 +29,40 @@
       // Get a 2D context for the canvas.
        ctx = canvas.getContext("2d"),
       
-       ballR = 10,
-       x = canvas.width/2,
-       y = canvas.height-30,
+       ballR = 10, // ball radius
+       ballX = 320, 
+       ballY = 550,
        dx = 3,
        dy = -3,
-       pongH =5,
-       pongW = 80,
-       pongX = (canvas.width-pongW) / 2,
-       rightKey = false,
-       leftKey = false,
-       brickRows = 3,
-       brickCol = 8,
-       brickW = 75,
-       brickH = 20,
-       holdBall = true,
-       brickOffsetTop = 50,
+       pongH =5, //paddle height
+       pongW = 80, // paddle width
+       pongX = (canvas.width-pongW) / 2, //x value of paddle
+       rightKey = false, 
+       leftKey = false, 
+       brickRows = 3, // number of brick rows
+       brickCol = 8, // number of columns in the brick row
+       brickW = 75, // width of the bricks
+       brickH = 20, // height of the bricks
+       brickOffsetTop = 50,  
        brickOffsetLeft = 1,
-       score = 0;
+       score = 0; // game score
       
-
+      
+      
+      // array of bricks
       var bricks = [];
-      for(c=0; c<brickCol; c++) 
+      for(columns=0; columns<brickCol; columns++) 
       {
-        bricks[c] = [];
-        for(r=0; r<brickRows; r++) 
+        bricks[columns] = [];
+        for(rows=0; rows<brickRows; rows++) 
         {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
+        bricks[columns][rows] = { x: 0, y: 0, status: 1 };
         }
       }
       
       function drawScore() 
       {
-        ctx.font = "16px Arial";
+        ctx.font = "20px Impact";
         ctx.fillStyle = "red";
         ctx.fillText("Score: "+score, 8, 18);
       }
@@ -71,7 +72,7 @@
       function drawBall() 
       {
           ctx.beginPath();
-          ctx.arc(x, y, ballR, 0, Math.PI*2);
+          ctx.arc(ballX, ballY, ballR, 0, Math.PI*2);
           ctx.fillStyle = "red";
           ctx.fill();
           ctx.closePath();
@@ -90,16 +91,16 @@
       // function draw the bricks
       function drawBricks() 
       {
-        for(c=0; c<brickCol; c++) 
+        for(columns=0; columns<brickCol; columns++) 
         {
-          for(r=0; r<brickRows; r++) 
+          for(rows=0; rows<brickRows; rows++) 
           {
-            if(bricks[c][r].status == 1) 
+            if(bricks[columns][rows].status == 1) 
             {
-                var brickX = (c*(brickW + 5) + brickOffsetLeft);
-                var brickY = (r*(brickH + 5) + brickOffsetTop);
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
+                var brickX = (columns*(brickW + 5) + brickOffsetLeft);
+                var brickY = (rows*(brickH + 5) + brickOffsetTop);
+                bricks[columns][rows].ballX = brickX;
+                bricks[columns][rows].ballY = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickW, brickH);
                 ctx.fillStyle = "green";
@@ -113,15 +114,15 @@
       // function to detect collisions
       function collisions() 
       {
-        for(c=0; c<brickCol; c++) 
+        for(columns=0; columns<brickCol; columns++) 
         {
-            for(r=0; r<brickRows; r++) 
+            for(rows=0; rows<brickRows; rows++) 
             {
-                var b = bricks[c][r];
+                var b = bricks[columns][rows];
                 if(b.status == 1) 
                 {
                   
-                    if(x > b.x && x < b.x+brickW && y > b.y && y < b.y+brickH) 
+                    if(ballX > b.ballX && ballX < b.ballX+brickW &&                          ballY > b.ballY && ballY < b.ballY + brickH) 
                     {
                         dy = -dy;
                         b.status = 0;
@@ -139,30 +140,30 @@
       }
       
       
-      
+      // Gets the animation going
       function draw() 
       {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          drawBricks();
-          drawBall();
-          drawPong();
-          drawScore();
-          collisions();
+          drawBricks(); // draw the wall of bricks
+          drawBall(); // draw the ball
+          drawPong(); // draw the paddle
+          drawScore(); // draw the score at the top
+          collisions(); // init collisions
           
-
-          if(x + dx > canvas.width-ballR || x + dx < ballR) 
+          
+          if(ballX + dx > canvas.width-ballR || ballX + dx < ballR) 
           {
               dx = -dx;
           }
         
-          if(y + dy < ballR) 
+          if(ballY + dy < ballR) 
           {
               dy = -dy;
           }
         
-          else if(y + dy > canvas.height-ballR) 
+          else if(ballY + dy > canvas.height-ballR) 
           {
-              if(x > pongX && x < pongX + pongW) 
+              if(ballX > pongX && ballX < pongX + pongW) 
               {
                   dy = -dy;
               }
@@ -170,7 +171,7 @@
               {
                 // if the ball hits the bottom of canvas
                 // reload the game
-                  alert("Game Over");
+                  alert("Game Over, Try Again");
                   document.location.reload();
               }
           }
@@ -216,13 +217,15 @@
           {
               pongX -= 7;
           }
-
-          x += dx;
-          y += dy;
+          
+          // Update the y location.
+          ballX += dx;
+          ballY += dy;
+        
+        requestAnimationFrame(draw);
       }
 
-      setInterval(draw, 10);
-      
+      draw();      
     </script>
   </body>
 </html>
