@@ -6,7 +6,7 @@ Each brick dissappears once hit by the ball and adds a one to the score. Once al
 ### Controls
 Hit or hold the **left key** to move the paddle left.
 
-Hit or hold the **right key** to move the paddle left.
+Hit or hold the **right key** to move the paddle right.
 
 
 
