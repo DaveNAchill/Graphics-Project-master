@@ -1,1 +1,2 @@
-## David's Project
+## Brick Breaker Game - Graphics Programming
+### 

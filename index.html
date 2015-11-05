@@ -21,33 +21,32 @@
   <body>
     
     
-    <canvas id="game-canvas" height="600px" width="650px"</canvas>
+    <canvas id="game-canvas" height="600px" width="635px"</canvas>
     
     <script type="text/javascript">
       
-      var canvas = document.getElementById("game-canvas");
+      var canvas = document.getElementById("game-canvas"),
       // Get a 2D context for the canvas.
-      var ctx = canvas.getContext("2d");
+       ctx = canvas.getContext("2d"),
       
-      
-      var ballR = 10; 
-      var x = canvas.width/2;
-      var y = canvas.height-30;
-      var dx = 3;
-      var dy = -3;
-      var pongH =5;
-      var pongW = 80;
-      var pongX = (canvas.width-pongW) / 2;
-      var rightKey = false;
-      var leftKey = false;
-      var brickRows = 3;
-      var brickCol = 7;
-      var brickW = 75;
-      var brickH = 20;
-      var holdBall = true;
-      var brickOffsetTop = 30;
-      var brickOffsetLeft = 30;
-      var score = 0;
+       ballR = 10,
+       x = canvas.width/2,
+       y = canvas.height-30,
+       dx = 3,
+       dy = -3,
+       pongH =5,
+       pongW = 80,
+       pongX = (canvas.width-pongW) / 2,
+       rightKey = false,
+       leftKey = false,
+       brickRows = 3,
+       brickCol = 8,
+       brickW = 75,
+       brickH = 20,
+       holdBall = true,
+       brickOffsetTop = 50,
+       brickOffsetLeft = 1,
+       score = 0;
       
 
       var bricks = [];
@@ -64,7 +63,7 @@
       {
         ctx.font = "16px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("Score: "+score, 8, 20);
+        ctx.fillText("Score: "+score, 8, 18);
       }
       
   
