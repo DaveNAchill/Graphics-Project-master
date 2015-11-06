@@ -9,7 +9,6 @@ Hit or hold the **left key** to move the paddle left.
 
 Hit or hold the **right key** to move the paddle right.
 
-### Other Notes
 
 
 
